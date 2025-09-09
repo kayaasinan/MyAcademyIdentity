@@ -14,7 +14,7 @@ namespace EmailApp.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<AppUser>().HasMany(message => message.SentMessages).WithOne(s=>s.Sender).HasForeignKey(x => x.SenderId).OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<AppUser>().HasMany(message => message.RecieverMessages).WithOne(y=>y.Reciever).HasForeignKey(x => x.RecieverId).OnDelete(:DeleteBehavior.Restrict);
+            builder.Entity<AppUser>().HasMany(message => message.RecieverMessages).WithOne(y=>y.Reciever).HasForeignKey(x => x.RecieverId).OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

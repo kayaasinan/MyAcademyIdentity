@@ -1,5 +1,6 @@
 using EmailApp.Context;
 using EmailApp.Entities;
+using EmailApp.Validations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,12 +12,25 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"));
 });
 
+
+
 builder.Services.AddIdentity<AppUser, AppRole>(config =>
 {
     config.User.RequireUniqueEmail = true;
-}).AddEntityFrameworkStores<AppDbContext>();
+
+}).AddEntityFrameworkStores<AppDbContext>()
+ .AddErrorDescriber<CustomErrorDescriber>();
+
+
 
 builder.Services.AddControllersWithViews();
+
+
+//Default olarak gelen tarayýcý ayarýný deðiþtirdik.
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Login/Index";
+});
 
 var app = builder.Build();
 
@@ -30,7 +44,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
