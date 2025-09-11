@@ -1,0 +1,32 @@
+﻿@model List<Message>
+@{
+    ViewData["Title"] = "Index";
+    int count = 0;
+}
+
+<h3>Gelen Mesajlar</h3>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>#</th>
+        <th>Ad Soyad</th>
+        <th>Email</th>
+        <th>Konu</th>
+        <th>Mesaj Tarihi</th>
+        <th>Mesajı Aç</th>
+    </tr>
+    @foreach(var item in Model)
+    {
+        count++;
+        <tr>
+            <th>@count</th>
+            <td>@item.Sender.FirstName @item.Sender.LastName</td>
+            <td>@item.Sender.Email</td>
+            <td>@item.Subject</td>
+            <td>@item.SendDate.ToString("dd.MM.yyyy HH:mm")</td>
+            <td><a href="/Message/MessageDetail/@item.MessageId" class="btn btn-outline-info">Mesajı Aç</a></td>
+        </tr>
+    }
+
+</table>
+<a href="/Message/SendMessage/" class="btn btn-outline-primary">Mesaj Gönder</a>

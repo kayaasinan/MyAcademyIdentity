@@ -29,6 +29,7 @@ builder.Services.AddControllersWithViews();
 //Default olarak gelen tarayýcý ayarýný deðiþtirdik.
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.Cookie.Name = "IdentityCookie";
     options.LoginPath = "/Login/Index";
 });
 
