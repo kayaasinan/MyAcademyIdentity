@@ -31,7 +31,10 @@ namespace EmailApp.Controllers
             }
             return RedirectToAction("Index","Message");
         }
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index","Login");
+        }
     }
-
-
 }
