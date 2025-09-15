@@ -1,30 +1,36 @@
 ﻿@model Message
+
 @{
     ViewData["Title"] = "MessageDetail";
+    Layout = "~/Views/MainLayout/Index.cshtml";
 }
 
-<h1>Mesaj İçeriği</h1>
+@if (Model != null)
+{
+    <div class="mailcontent-subject">
+        <h4>Mesaj İçeriği</h4>
+    </div>
 
-<table class="table table-striped">
-    <tr>
-        <th>Gönderen Ad Soyad:</th>
-        <td>@Model.Sender.FirstName @Model.Sender.LastName</td>
-    </tr>
-    <tr>
-        <th>Gönderen Email:</th>
-        <td>@Model.Sender.Email</td>
-    </tr>
-    <tr>
-        <th>Konu:</th>
-        <td>@Model.Subject</td>
-    </tr>
-    <tr>
-        <th>Mesaj:</th>
-        <td>@Model.Body</td>
-    </tr>
+    <div class="mailcontent-group">
+        <div class="mailcontent-item">
+            <div class="mailcontent-header">
+                <div class="mailcontent-sender">
+                    <h6>@Model.Sender.FirstName @Model.Sender.LastName <span>&lt;@Model.Sender.Email&gt;</span></h6>
+                    <p>Kime: @Model.Reciever.FirstName @Model.Reciever.LastName</p>
+                </div>
+                <div class="mailcontent-time">@Model.SendDate.ToString("dd-MM-yyyy")</div>
+            </div>
+            <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="margin: 0;"> Konu: @Model.Body</p>
+            </div>
+        </div>
+    </div>
 
-
-</table>
-
-<a href="/Message/Index" class="btn btn-outline-primary">Mesajlara Geri Dön</a>
-
+    <div class="mailcontent-footer">
+        <a href="/Message/Index/" class="btn btn-outline-info btn-icontext"><i class="ri-reply-line me-1"></i> Mesajlara Dön</a>
+    </div>
+}
+else
+{
+    <p>Mesaj bulunamadı.</p>
+}

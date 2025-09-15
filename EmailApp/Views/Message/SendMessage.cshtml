@@ -1,23 +1,40 @@
 ﻿@model SendMessageViewModel
 @{
     ViewData["Title"] = "SendMessage";
+    Layout = "~/Views/MainLayout/Index.cshtml";
 }
 
-<h3>Yeni Mesaj Gönder</h3>
+<div class="message-compose">
+    <div class="mailcontent-subject">
+        <h4>Yeni Mesaj Gönder</h4>
+    </div>
+    <div class="mailcontent-group">
+        <div class="mailcontent-item">
+            <div class="mailcontent-body">
+                <form method="post">
+                    <div class="form-group">
+                        <label for="recipientEmail">Alıcı:</label>
+                        <input type="email" class="form-control" asp-for="RecieverEmail" placeholder="Alıcının e-posta adresini girin" required>
+                    </div>
 
-<form method="post">
-    <div class="form-group">
-        <label>Alıcı Email</label>
-        <input type="email" asp-for="RecieverEmail" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Konu</label>
-        <input type="text" asp-for="Subject" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Mesaj</label>
-        <textarea type="text" asp-for="Body" class="form-control" rows="10" required></textarea>
-    </div>
-    <button class="btn btn-primary">Gönder</button>
-</form>
+                    <div class="form-group">
+                        <label for="subject">Konu:</label>
+                        <input type="text" class="form-control" asp-for="Subject" placeholder="Konu başlığını girin" required>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="messageBody">Mesaj:</label>
+                        <textarea class="form-control" asp-for="Body" rows="15" placeholder="Mesajınızı buraya yazın" required></textarea>
+                    </div>
+                    <br />
+                    <button type="submit" class="btn btn-outline-info btn-icontext"><i class="ri-send-plane-fill me-2"></i> Gönder</button>
+                </form>
+             
+            </div>
+        </div>
+    </div>
+    <div class="mailcontent-footer">
+       
+        <a href="/Message/Index/" class="btn btn-outline-success btn-icontext"><i class="ri-reply-line me-1"></i> Taslakara Kaydet</a>
+    </div>
+</div>

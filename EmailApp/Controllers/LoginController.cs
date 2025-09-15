@@ -29,9 +29,7 @@ namespace EmailApp.Controllers
                 ModelState.AddModelError("", "Email veya şifre hatalı");
                 return View(model);
             }
-            return RedirectToAction("Index","Message");
+            return RedirectToAction("Index", "Message");
         }
     }
-
-
 }

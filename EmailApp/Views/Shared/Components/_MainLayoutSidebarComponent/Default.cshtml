@@ -1,0 +1,38 @@
+﻿
+@*
+    Main Layout Sidebar Component
+*@
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <a href="" class="sidebar-logo">
+            <strong>Sinan</strong>Kaya
+        </a>
+    </div><!-- sidebar-header -->
+    <div class="sidebar-body">
+        <label class="sidebar-label">Mail</label>
+        <nav class="nav flex-column mb-5">
+            <a href="#" class="nav-link" onclick="window.location.href='/Message/Index'">
+                <i class="ri-inbox-line" style="margin-right: 6px;"></i>
+                <span>Gelen Kutusu</span>
+                <span class="badge bg-info ms-auto">@ViewBag.messageCount</span>
+            </a>
+            <a href="#" class="nav-link" onclick="window.location.href='/Message/Sendbox'">
+                <i class="ri-inbox-line" style="margin-right: 6px;"></i>
+                <span>Giden Kutusu</span>
+                <span class="badge bg-info ms-auto">@ViewBag.messageCount</span>
+            </a>
+  
+            <a href="" class="nav-link"><i class="ri-draft-line"></i> <span>Taslaklar</span> <small>5</small></a>
+            <a href="" class="nav-link"><i class="ri-spam-2-line"></i> <span>Spam</span></a>
+            <a href="" class="nav-link"><i class="ri-delete-bin-line"></i> <span>Çöp Kutusu</span></a>
+        </nav>
+
+        <label class="sidebar-label">Labels</label>
+        <nav class="nav flex-column mb-5">
+            <a href="" class="nav-link"><i class="ri-price-tag-line"></i> <span>Önemli</span></a>
+            <a href="" class="nav-link"><i class="ri-price-tag-line"></i> <span>Notlar</span></a>
+            <a href="" class="nav-link"><i class="ri-price-tag-line"></i> <span>Diğer</span></a>
+        </nav>
+    </div><!-- sidebar-body -->
+</div><!-- sidebar -->

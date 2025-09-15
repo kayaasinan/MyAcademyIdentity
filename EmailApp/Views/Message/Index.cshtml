@@ -1,10 +1,40 @@
 ﻿@model List<Message>
 @{
     ViewData["Title"] = "Index";
-    int count = 0;
+    Layout = "~/Views/MainLayout/Index.cshtml";
+  
+  
 }
 
-<h3>Gelen Mesajlar</h3>
+
+
+<div class="mailcontent-subject">
+    <h4>Gelen Kutusu</h4>
+</div><!-- mailcontent-subject -->
+@foreach(var item in Model){
+<div class="mailcontent-group">
+    <div class="mailcontent-item">
+        <div class="mailcontent-header">
+            <div class="mailcontent-sender">
+                <h6>@item.Sender.FirstName @item.Sender.LastName <span>&lt;@item.Sender.Email&gt;</span></h6>
+                <p>Kime: @item.Reciever.FirstName @item.Reciever.LastName</p>
+            </div><!-- mail-sender -->
+                <div class="mailcontent-time">@item.SendDate.ToString("dd-MM-yyyy")</div>
+        </div><!-- mailcontent-header -->
+            <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="margin: 0;"> Konu: @item.Subject</p>
+                <a href="/Message/MessageDetail/@item.MessageId" class="btn btn-primary btn-icontext">Oku</a>
+            </div>
+    </div>
+</div>
+}
+<div class="mailcontent-footer">
+    <a href="/Message/SendMessage/" class="btn btn-outline-info btn-icontext"><i class="ri-reply-line me-1"></i> Mesaj Gönder</a>
+</div>
+
+
+
+@* <h3>Gelen Mesajlar</h3>
 
 <table class="table table-bordered table-striped">
     <tr>
@@ -29,4 +59,4 @@
     }
 
 </table>
-<a href="/Message/SendMessage/" class="btn btn-outline-primary">Mesaj Gönder</a>
+<a href="/Message/SendMessage/" class="btn btn-outline-primary">Mesaj Gönder</a> *@
