@@ -51,6 +51,7 @@ namespace EmailApp.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> SendMessage(SendMessageViewModel model, string action)
         {
