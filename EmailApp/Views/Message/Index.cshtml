@@ -9,7 +9,7 @@
 
 <div class="mailcontent-subject">
     <h4>Gelen Kutusu</h4>
-</div><!-- mailcontent-subject -->
+</div>
 @foreach (var item in Model)
 {
     <div class="mailcontent-group">
@@ -25,7 +25,6 @@
             
             <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center;">
 
-                <!-- Sol taraf: Yıldız + Konu -->
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <a href="/Message/ImportantMessages/@item.MessageId"
                        style="color: #f5c518; font-size: 20px; text-decoration: none;">

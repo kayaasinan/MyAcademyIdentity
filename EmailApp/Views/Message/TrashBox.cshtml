@@ -12,7 +12,6 @@
 {
     <div class="mailcontent-group">
         <div class="mailcontent-item">
-            <!-- Üst Bilgi: Gönderen + Alıcı + Tarih -->
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #666; margin-top: 2px;">
                 <div>
                     @item.Sender?.FirstName @item.Sender?.LastName &lt;<strong>@item.Sender?.Email</strong>&gt;
@@ -26,14 +25,14 @@
                 </div>
             </div>
 
-            <!-- Konu + Butonlar Kutusu -->
+
             <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-                <!-- Konu -->
+       
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <p style="margin: 0; font-size: 14px; font-weight: 500;">Konu: @item.Subject</p>
                 </div>
 
-                <!-- Butonlar -->
+         
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <a href="/Message/MessageDetail/@item.MessageId"
                        class="btn btn-sm btn-primary"

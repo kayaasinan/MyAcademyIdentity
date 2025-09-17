@@ -18,21 +18,19 @@
         const messageToggle = document.getElementById('message-toggle');
         const messageMenu = document.getElementById('message-menu');
 
-        // Kullanıcı menüsünü aç/kapat
         userToggle.addEventListener('click', function (e) {
             e.stopPropagation();
             userMenu.classList.toggle('active');
             messageMenu.classList.remove('active');
         });
 
-        // Mesaj menüsünü aç/kapat
         messageToggle.addEventListener('click', function (e) {
             e.stopPropagation();
             messageMenu.classList.toggle('active');
             userMenu.classList.remove('active');
         });
 
-        // Sayfanın başka yerine tıklanınca menüleri kapat
+    
         document.addEventListener('click', function (e) {
             if (!userToggle.contains(e.target) && !userMenu.contains(e.target)) {
                 userMenu.classList.remove('active');
@@ -42,7 +40,7 @@
             }
         });
 
-        // SweetAlert ile çıkış işlemi
+ 
         logoutLink.addEventListener('click', function (e) {
             e.preventDefault();
 
