@@ -65,6 +65,7 @@ namespace EmailApp.Controllers
                 return View(model);
             }
 
+
             var message = new Message
             {
                 Body = model.Body,
