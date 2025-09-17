@@ -1,0 +1,65 @@
+﻿@*
+    Main Layout Script Component
+*@
+
+@* SweetAlert Script'i bu alanda *@
+
+<script src="~/smartmail-main/lib/jquery/jquery.min.js"></script>
+<script src="~/smartmail-main/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/smartmail-main/lib/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/assets/js/script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const userToggle = document.getElementById('user-toggle');
+        const userMenu = document.getElementById('user-menu');
+        const logoutLink = document.getElementById('logout-link');
+
+        const messageToggle = document.getElementById('message-toggle');
+        const messageMenu = document.getElementById('message-menu');
+
+        // Kullanıcı menüsünü aç/kapat
+        userToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            userMenu.classList.toggle('active');
+            messageMenu.classList.remove('active');
+        });
+
+        // Mesaj menüsünü aç/kapat
+        messageToggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            messageMenu.classList.toggle('active');
+            userMenu.classList.remove('active');
+        });
+
+        // Sayfanın başka yerine tıklanınca menüleri kapat
+        document.addEventListener('click', function (e) {
+            if (!userToggle.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.remove('active');
+            }
+            if (!messageToggle.contains(e.target) && !messageMenu.contains(e.target)) {
+                messageMenu.classList.remove('active');
+            }
+        });
+
+        // SweetAlert ile çıkış işlemi
+        logoutLink.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: 'Oturumunuz sonlandırılacak.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, çıkış yap!',
+                cancelButtonText: 'İptal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = logoutLink.getAttribute('href');
+                }
+            });
+        });
+    });
+</script>

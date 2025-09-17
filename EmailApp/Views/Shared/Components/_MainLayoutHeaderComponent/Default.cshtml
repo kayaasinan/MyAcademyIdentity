@@ -1,0 +1,40 @@
+﻿@model List<Message>
+@*
+    Main Layout Header Component / Bu alanın cssleri ---> styleHeader.css
+*@
+
+<div class="header">
+    <div class="user-info-container">
+        <div class="message-container">
+            <div class="message-icon" id="message-toggle">
+                <span class="message-count">@Model.Count</span>
+                <i class="bi bi-chat-dots-fill"></i>
+            </div>
+            <div class="dropdown-menu" id="message-menu">
+                @foreach (var item in Model)
+                {
+                    <div class="message-item">
+                        <strong>Konu:</strong> @item.Subject<br>
+                        <strong>Gönderen:</strong> @item.Sender.FirstName @item.Sender.LastName<br>
+                        <strong>İçerik:</strong>
+                        <span style="color: red;">
+                            @(item.Body.Length > 30 ? item.Body.Substring(0, 30) + "..." : item.Body)
+                        </span>
+                    </div>
+
+                }
+                <a href="/Message/Index" class="btn btn-outline-primary">Mesajlara Git</a>
+            </div>
+        </div>
+
+        <div class="user-menu-container">
+            <span class="username" id="user-toggle">@ViewBag.email</span>
+            <div class="dropdown-menu" id="user-menu">
+                <a href="/Login/Logout" class="menu-item" id="logout-link">
+                    <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -8044,12 +8044,12 @@ textarea.form-control-lg {
 
 .mailcontent {
     position: fixed;
-    top: 0;
-    left: 230px !important; /* sidebar geniþliði */
+    left: 230px !important;
     width: calc(100vw - 230px) !important;
     height: 100vh;
     background-color: #f5f6fa;
     transition: all 0.3s;
+    padding-top: 60px; /* Buraya padding-top ekleyin */
 }
   @media (prefers-reduced-motion: reduce) {
     .mailcontent {

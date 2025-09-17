@@ -1,0 +1,113 @@
+﻿/*/assets/header.css/styleHeader.css*/
+.header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #f4f4f4;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+
+}
+
+.user-info {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.username {
+    margin-right: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.message-icon {
+    position: relative; /* İçindeki elemanın konumlanmasına olanak tanır */
+    cursor: pointer;
+}
+
+.message-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.user-info-container {
+    display: flex; /* Alt elemanları yan yana hizala */
+    align-items: center; /* Dikeyde hizala */
+    justify-content: flex-end; /* İçeriği sağa hizala */
+    gap: 15px; /* Elemanlar arasına boşluk ekle */
+}
+/* Dropdown menülerinin genel stili */
+.dropdown-menu {
+    display: none; /* Başlangıçta gizle */
+    position: absolute;
+    top: 45px; /* Butonun hemen altında açılması için */
+    right: 0;
+    width: 250px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
+    padding: 10px;
+}
+
+    /* Aktif olduğunda görünür yap */
+    .dropdown-menu.active {
+        display: block;
+    }
+
+/* Mesaj kutusundaki her bir mesajın stili */
+.message-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Logout linkinin stili */
+.menu-item {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+    .menu-item:hover {
+        background-color: #f0f0f0;
+    }
+
+/* Konumlandırma için kapsayıcılar */
+.message-container, .user-menu-container {
+    position: relative; /* Alt menülerin pozisyonu için */
+}
+
+/* Ek olarak, Bootstrap Icons için */
+.menu-item i {
+    margin-right: 8px;
+}
+.message-container {
+    position: relative;
+    display: inline-block;
+}
+
+
+.btn-outline-primary {
+    width: 100%;
+}
+#user-menu, #message-menu {
+    display: none;
+}
+
+    #user-menu.active, #message-menu.active {
+        display: block;
+    }
+
+

@@ -27,14 +27,18 @@
                         <textarea class="form-control" asp-for="Body" rows="15" placeholder="Mesajınızı buraya yazın" required></textarea>
                     </div>
                     <br />
-                    <button type="submit" class="btn btn-outline-info btn-icontext"><i class="ri-send-plane-fill me-2"></i> Gönder</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" name="action" value="send" class="btn btn-outline-info btn-icontext">
+                            <i class="ri-send-plane-fill me-2"></i> Gönder
+                        </button>
+
+                        <button type="submit" name="action" value="draft" class="btn btn-outline-success btn-icontext">
+                            <i class="ri-reply-line me-1"></i> Taslaklara Kaydet
+                        </button>
+                    </div>
                 </form>
              
             </div>
         </div>
-    </div>
-    <div class="mailcontent-footer">
-       
-        <a href="/Message/Index/" class="btn btn-outline-success btn-icontext"><i class="ri-reply-line me-1"></i> Taslakara Kaydet</a>
     </div>
 </div>

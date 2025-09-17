@@ -1,0 +1,79 @@
+﻿@model List<Message>
+@{
+    ViewData["Title"] = "Sendbox";
+    Layout = "~/Views/MainLayout/Index.cshtml";
+}
+
+<div class="mailcontent-subject">
+    <h4>Giden Kutusu</h4>
+</div>
+@foreach (var item in Model)
+{
+    <div class="mailcontent-group">
+        <div class="mailcontent-item">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #666; margin-top: 2px;">
+                <div>
+                    @item.Sender.FirstName @item.Sender.LastName &lt;<strong>@item.Sender.Email</strong>&gt; Kime: <strong>@item.Reciever.FirstName @item.Reciever.LastName</strong>
+                </div>
+                <div style="color: #999;">
+                    @item.SendDate.ToString("dd-MM-yyyy")
+                </div>
+            </div>
+
+            <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center;">
+
+                <!-- Sol taraf: Yıldız + Konu -->
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <a href="/Message/ImportantMessages/@item.MessageId"
+                       style="color: #f5c518; font-size: 20px; text-decoration: none;">
+                        <i class="ri-star-line"></i>
+                    </a>
+                    <a href="/Message/BusinessMessages/@item.MessageId"
+                       style="color: #dc3545; font-size: 20px; text-decoration: none;">
+                        <i class="ri-home-heart-line"></i>
+                    </a>
+                    <a href="/Message/FamilyMessages/@item.MessageId"
+                       style="color: #28a745; font-size: 20px; text-decoration: none;">
+                        <i class="ri-briefcase-line"></i>
+                    </a>
+                    <p style="margin: 0; font-size: 14px; font-weight: 500;">Konu: @item.Subject</p>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <a href="/Message/MessageDetail/@item.MessageId"
+                       class="btn btn-sm btn-primary"
+                       style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
+                        Oku
+                    </a>
+                    <button onclick="deletedMessage(@item.MessageId)"
+                            class="btn btn-sm btn-danger"
+                            style="padding: 2px 8px; font-size: 12px; border-radius: 3px; margin-left: auto;">
+                        <i class="ri-delete-bin-line"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="mailcontent-footer">
+    <a href="/Message/SendMessage/" class="btn btn-outline-info btn-icontext"><i class="ri-reply-line me-1"></i> Mesaj Gönder</a>
+</div>
+
+<script>
+    function deletedMessage(id){
+            Swal.fire({
+      title: "Mesajı çöp kutusuna göndermek istediğinizden emin misiniz?",
+      text: "Geri almak için ÇÖP KUTUSU sayfasına gidiniz!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Evet, Sil!",
+      cancelButtonText: "İptal"
+    }).then((result) => {
+      if (result.isConfirmed) {
+      window.location.href="/Message/DeleteMessage/"+id;
+      }
+    });
+    }
+</script>

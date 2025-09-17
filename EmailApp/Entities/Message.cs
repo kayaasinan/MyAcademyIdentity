@@ -1,4 +1,6 @@
-﻿namespace EmailApp.Entities
+﻿using EmailApp.Enums;
+
+namespace EmailApp.Entities
 {
     public class Message
     {
@@ -10,5 +12,11 @@
         public string Subject { get; set; }
         public string Body { get; set; }
         public DateTime SendDate { get; set; }
+        public bool IsDraft { get; set; }
+        public bool IsDeleted { get; set; }
+        public bool IsImportant { get; set; }
+        public bool IsRead { get; set; }
+
+        public MessageCategory Category { get; set; }=MessageCategory.Default;
     }
 }

@@ -3,7 +3,7 @@ using EmailApp.Entities;
 using EmailApp.Validations;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+    var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -43,17 +43,18 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 
-app.MapStaticAssets();
+    app.UseHttpsRedirection();
+    app.UseRouting();
+    app.UseAuthentication();
+    app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    app.MapStaticAssets();
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Message}/{action=Index}/{id?}")
+        .WithStaticAssets();
 
 
-app.Run();
+    app.Run();
