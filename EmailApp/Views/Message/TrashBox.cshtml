@@ -20,7 +20,7 @@
                         <text>Kime: <strong>@item.Reciever.FirstName @item.Reciever.LastName</strong></text>
                     }
                 </div>
-                <div style="color: #999;">
+                <div style="color: tomato;">
                     @item.SendDate.ToString("dd-MM-yyyy")
                 </div>
             </div>
@@ -38,29 +38,24 @@
                        class="btn btn-sm btn-primary"
                        style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">Oku</a>
 
-                    <form method="post" action="/Message/RestoreMessage" style="display: inline;">
-                        <input type="hidden" name="id" value="@item.MessageId" />
-                        <button type="submit"
-                                class="btn btn-sm btn-success"
-                                style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
-                            Geri Al
-                        </button>
-                    </form>
-
-                    <button onclick="deletedMessage(@item.MessageId)"
-                            class="btn btn-sm btn-danger"
+                    <button onclick="backToMessage(@item.MessageId)"
+                            class="btn btn-sm btn-success"
                             style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
-                        <i class="ri-delete-bin-line"></i>
+                        Geri Al
+                    </button>
+
+                    <button onclick="deletedMessage(@item.MessageId)" class="btn btn-sm btn-danger" style="padding: 2px 8px; font-size: 12px; border-radius: 3px;"><i class="ri-delete-bin-line"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 }
+
 <script>
     function deletedMessage(id) {
         Swal.fire({
-            title: "Mesajı kalıcı istediğinizden emin misiniz?",
+            title: "Mesajı kalıcı olarak silmek istediğinizden emin misiniz?",
             text: "Bu işlemi geri alamazsınız!",
             icon: "warning",
             showCancelButton: true,
@@ -70,8 +65,39 @@
             cancelButtonText: "İptal"
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('deleteForm-' + id).submit();
+                window.location.href = "/Message/DeleteTrashBoxMessage/" + id;
             }
         });
     }
 </script>
+
+<script>
+    function backToMessage(id) {
+        Swal.fire({
+            title: "Mesajı geri almak istediğinizden emin misiniz?",
+            text: "Mesaj geri kutusuna taşınacak.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Evet, Geri Al!",
+            cancelButtonText: "İptal"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "/Message/BackToMessage";
+
+                const input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "id";
+                input.value = id;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+</script>
+

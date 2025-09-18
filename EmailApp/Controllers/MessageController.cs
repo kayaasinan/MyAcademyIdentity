@@ -127,7 +127,7 @@ namespace EmailApp.Controllers
         public async Task<IActionResult> DeleteMessage(int id)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var deletedMessage = _context.Messages.FirstOrDefault( x => x.MessageId == id && ((x.IsDraft && x.SenderId == user.Id) || (!x.IsDraft && (x.SenderId == user.Id || x.RecieverId == user.Id))));
+            var deletedMessage = _context.Messages.FirstOrDefault(x => x.MessageId == id && ((x.IsDraft && x.SenderId == user.Id) || (!x.IsDraft && (x.SenderId == user.Id || x.RecieverId == user.Id))));
 
             if (deletedMessage == null)
             {
@@ -141,20 +141,46 @@ namespace EmailApp.Controllers
         {
             await SetMessageCounts();
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var deletedMessages = _context.Messages.Include(m => m.Sender).Include(m => m.Reciever).Where(m => m.IsDeleted && (m.SenderId == user.Id || m.RecieverId == user.Id)).ToList();
+            var deletedMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id)).ToList();
             return View(deletedMessages);
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteMessagePermanently(int id)
+        public async Task<IActionResult> DeleteTrashBoxMessage(int id)
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var message = _context.Messages.FirstOrDefault(m => m.MessageId == id && (m.SenderId == user.Id || m.RecieverId == user.Id));
+            var message = _context.Messages.FirstOrDefault(x => x.MessageId == id && (x.SenderId == user.Id || x.RecieverId == user.Id));
             if (message == null) return NotFound();
 
             _context.Messages.Remove(message);
             _context.SaveChanges();
 
             return RedirectToAction("TrashBox");
+        }
+        [HttpPost]
+        public async Task<IActionResult> BackToMessage(int id)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var message = _context.Messages.FirstOrDefault(x => x.MessageId == id && x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id));
+            if (message == null) return NotFound();
+
+            message.IsDeleted = false;
+            _context.SaveChanges();
+
+            // Çöp kutusundan geri alınacak mesajı Id'ye göre alıyorum.
+
+            if (message.SenderId == user.Id && message.IsDraft)
+            {
+                return RedirectToAction("DraftBox");
+            }
+            else if (message.SenderId == user.Id)
+            {
+                return RedirectToAction("Sendbox");
+            }
+            else if (message.RecieverId == user.Id)
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
         }
     }
 }
