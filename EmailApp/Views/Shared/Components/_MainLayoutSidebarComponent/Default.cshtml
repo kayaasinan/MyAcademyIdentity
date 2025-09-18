@@ -43,11 +43,22 @@
 
         <label class="sidebar-label">Diğer</label>
         <nav class="nav flex-column mb-5">
-            <a href="aa" class="nav-link"><i class="ri-briefcase-line" style="color: #dc3545;"></i> <span>İş Mesajları</span></a>
-            <a href="" class="nav-link"><i class="ri-home-heart-line" style="color: #28a745;"></i> <span>Aile</span></a>
-            <a href="" class="nav-link"> <i class="ri-star-line" style="color: #f1c40f;"></i> <span>Önemli</span>
+            <a href="/Message/CategoryMessages?category=Business" class="nav-link">
+                <i class="ri-briefcase-line" style="color: #dc3545;"></i>
+                <span>İş Mesajları</span>
+                <span class="badge bg-info ms-auto">@ViewBag.businessMessageCount</span>
             </a>
-
+            <a href="/Message/CategoryMessages?category=Family" class="nav-link">
+                <i class="ri-home-heart-line" style="color: #28a745;"></i>
+                <span>Aile</span>
+                <span class="badge bg-info ms-auto">@ViewBag.familyMessageCount</span>
+            </a>
+            <a href="/Message/CategoryMessages?category=Important" class="nav-link">
+                <i class="ri-star-line" style="color: #f1c40f;"></i>
+                <span>Önemli</span>
+                <span class="badge bg-info ms-auto">@ViewBag.importantMessageCount</span>
+            </a>
         </nav>
+
     </div>
 </div>

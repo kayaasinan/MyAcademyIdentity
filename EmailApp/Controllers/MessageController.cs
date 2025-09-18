@@ -182,5 +182,46 @@ namespace EmailApp.Controllers
             }
             return RedirectToAction("Index");
         }
+        public async Task<IActionResult> CategoryMessages(MessageCategory messageCategory)
+        {
+            await SetMessageCounts(); 
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            var messages = _context.Messages
+                .Include(x => x.Sender)
+                .Include(x => x.Reciever)
+                .Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id)
+                            && x.Category == messageCategory
+                            && !x.IsDeleted)
+                .ToList();
+
+            ViewBag.Category = messageCategory; 
+
+            return View(messages); 
+        }
+
+       
+        [HttpPost]
+        public async Task<IActionResult> ChangeCategory(int id, MessageCategory category)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+            var message = _context.Messages.FirstOrDefault(x => x.MessageId == id);
+            if (message == null)
+                return NotFound();
+
+            message.Category = category;
+            await _context.SaveChangesAsync();
+
+          
+            if (message.SenderId == user.Id)
+                return RedirectToAction("Sendbox");
+            else if (message.RecieverId == user.Id)
+                return RedirectToAction("Index");
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

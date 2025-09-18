@@ -26,20 +26,33 @@
             <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center;">
 
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <a href="/Message/ImportantMessages/@item.MessageId"
-                       style="color: #f5c518; font-size: 20px; text-decoration: none;">
-                        <i class="ri-star-line"></i>
-                    </a>
-                    <a href="/Message/FamilyMessages/@item.MessageId"
-                       style="color: #28a745; font-size: 20px; text-decoration: none;">
-                        <i class="ri-home-heart-line"></i>
-                    </a>
-                    <a href="/Message/BusinessMessages/@item.MessageId"
-                       style="color: #dc3545; font-size: 20px; text-decoration: none;">
-                        <i class="ri-briefcase-line"></i>
-                    </a>
+                    <form method="post" action="/Message/ChangeCategory" style="display:inline;">
+                        <input type="hidden" name="id" value="@item.MessageId" />
+                        <input type="hidden" name="category" value="Important" />
+                        <button type="submit" style="background:none; border:none; cursor:pointer; color: #f5c518; font-size: 20px;">
+                            <i class="ri-star-line"></i>
+                        </button>
+                    </form>
+
+                    <form method="post" action="/Message/ChangeCategory" style="display:inline;">
+                        <input type="hidden" name="id" value="@item.MessageId" />
+                        <input type="hidden" name="category" value="Family" />
+                        <button type="submit" style="background:none; border:none; cursor:pointer; color: #28a745; font-size: 20px;">
+                            <i class="ri-home-heart-line"></i>
+                        </button>
+                    </form>
+
+                    <form method="post" action="/Message/ChangeCategory" style="display:inline;">
+                        <input type="hidden" name="id" value="@item.MessageId" />
+                        <input type="hidden" name="category" value="Business" />
+                        <button type="submit" style="background:none; border:none; cursor:pointer; color: #dc3545; font-size: 20px;">
+                            <i class="ri-briefcase-line"></i>
+                        </button>
+                    </form>
+
                     <p style="margin: 0; font-size: 14px; font-weight: 500;">Konu: @item.Subject</p>
                 </div>
+
 
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <a href="/Message/MessageDetail/@item.MessageId"
