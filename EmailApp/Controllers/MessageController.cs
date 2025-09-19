@@ -19,7 +19,7 @@ namespace EmailApp.Controllers
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToPagedList(page,4);
+            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToPagedList(page, 4);
             return View(messages);
         }
         public async Task<IActionResult> MessageDetail(int id)
@@ -37,7 +37,7 @@ namespace EmailApp.Controllers
             return View(message);
         }
 
-        public async Task<IActionResult> Sendbox(int page=1)
+        public async Task<IActionResult> Sendbox(int page = 1)
         {
             await SetMessageCounts();
             var user = await GetUser();
@@ -68,8 +68,6 @@ namespace EmailApp.Controllers
                 ModelState.AddModelError("", "Alıcı bulunamadı!");
                 return View(model);
             }
-
-
             var message = new Message
             {
                 Body = model.Body,
@@ -136,19 +134,17 @@ namespace EmailApp.Controllers
             var user = await GetUser();
             var deletedMessage = _context.Messages.FirstOrDefault(x => x.MessageId == id && ((x.IsDraft && x.SenderId == user.Id) || (!x.IsDraft && (x.SenderId == user.Id || x.RecieverId == user.Id))));
 
-            if (deletedMessage == null)
-            {
-                return NotFound();
-            }
+            if (deletedMessage == null) return NotFound();
+
             deletedMessage.IsDeleted = true;
             await _context.SaveChangesAsync();
             return RedirectToAction("TrashBox");
         }
-        public async Task<IActionResult> TrashBox(int page=1)
+        public async Task<IActionResult> TrashBox(int page = 1)
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var deletedMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id)).ToPagedList(page,4);
+            var deletedMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id)).ToPagedList(page, 4);
             return View(deletedMessages);
         }
         [HttpPost]
@@ -167,10 +163,7 @@ namespace EmailApp.Controllers
         public async Task<IActionResult> BackToMessage(int id)
         {
             var user = await GetUser();
-            var message = _context.Messages.FirstOrDefault(x =>
-                x.MessageId == id &&
-                x.IsDeleted &&
-                (x.SenderId == user.Id || x.RecieverId == user.Id));
+            var message = _context.Messages.FirstOrDefault(x => x.MessageId == id && x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id));
 
             if (message == null) return NotFound();
 
@@ -182,14 +175,9 @@ namespace EmailApp.Controllers
 
             //Burada gelen/giden kutusu yönlendirmesi yapıyorum.
 
-            if (message.RecieverId == user.Id)
-            {
-                return RedirectToAction("Index");
-            }
-            else if (message.SenderId == user.Id)
-            {
-                return RedirectToAction("Sendbox");
-            }
+            if (message.RecieverId == user.Id) return RedirectToAction("Index");
+
+            else if (message.SenderId == user.Id) return RedirectToAction("Sendbox");
 
             return RedirectToAction("Index");
 
@@ -198,57 +186,38 @@ namespace EmailApp.Controllers
         public async Task<IActionResult> BackToMessageFromCategory(int id)
         {
             var user = await GetUser();
-            var message = _context.Messages.FirstOrDefault(x =>
-                x.MessageId == id &&
-                !x.IsDeleted &&
-                (x.SenderId == user.Id || x.RecieverId == user.Id));
+            var message = _context.Messages.FirstOrDefault(x => x.MessageId == id && !x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id));
 
             if (message == null) return NotFound();
 
             message.Category = MessageCategory.Default;
             await _context.SaveChangesAsync();
 
-            if (message.RecieverId == user.Id)
-            {
-                return RedirectToAction("Index");
-            }
-            else if (message.SenderId == user.Id)
-            {
-                return RedirectToAction("Sendbox");
-            }
+            if (message.RecieverId == user.Id) return RedirectToAction("Index");
+
+            else if (message.SenderId == user.Id) return RedirectToAction("Sendbox");
 
             return RedirectToAction("Index");
         }
-
         [HttpPost]
         public async Task<IActionResult> ChangeCategory(int id, MessageCategory category)
         {
             var user = await GetUser();
 
             var message = _context.Messages.FirstOrDefault(x => x.MessageId == id);
-            if (message == null)
-                return NotFound();
+            if (message == null) return NotFound();
 
             message.Category = category;
             await _context.SaveChangesAsync();
 
-
-            if (category == MessageCategory.Business)
-            {
-                return RedirectToAction("BusinessMessages");
-            }
-            else if (category == MessageCategory.Family)
-            {
-                return RedirectToAction("FamilyMessages");
-            }
-            else if (category == MessageCategory.Important)
-            {
-                return RedirectToAction("ImportantMessages");
-            }
-            else
-            {
-                return RedirectToAction("Index");
-            }
+            if (category == MessageCategory.Business) return RedirectToAction("BusinessMessages");
+          
+            else if (category == MessageCategory.Family) return RedirectToAction("FamilyMessages");
+            
+            else if (category == MessageCategory.Important) return RedirectToAction("ImportantMessages");
+           
+            else return RedirectToAction("Index");
+           
         }
         public async Task<IActionResult> BusinessMessages(int page = 1)
         {
