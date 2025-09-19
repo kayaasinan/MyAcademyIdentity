@@ -1,4 +1,4 @@
-﻿@model List<Message>
+﻿@model IPagedList<Message>
 @{
     ViewData["Title"] = "DraftBox";
     Layout = "~/Views/MainLayout/Index.cshtml";
@@ -35,7 +35,7 @@ else
                 </div>
 
 
-                <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center; padding:5px 10px; border-radius:4px;">
 
 
                     <div style="display: flex; align-items: center; gap: 16px;">
@@ -73,4 +73,6 @@ else
     });
     }
 </script>
+
+@await Component.InvokeAsync("_MainLayoutPagedComponent", new { model = Model, actionName = "DraftBox" })
 

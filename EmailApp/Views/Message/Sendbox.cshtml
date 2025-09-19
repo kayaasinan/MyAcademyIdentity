@@ -1,4 +1,4 @@
-﻿@model List<Message>
+﻿@model IPagedList<Message>
 @{
     ViewData["Title"] = "Sendbox";
     Layout = "~/Views/MainLayout/Index.cshtml";
@@ -30,7 +30,7 @@ else
                     </div>
                 </div>
 
-                <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center; padding:5px 10px; border-radius:4px;">
 
                     <div style="display: flex; align-items: center; gap: 16px;">
                         <form method="post" action="/Message/ChangeCategory" style="display:inline;">
@@ -102,3 +102,5 @@ else
     });
     }
 </script>
+
+@await Component.InvokeAsync("_MainLayoutPagedComponent", new { model = Model, actionName = "Sendbox" })

@@ -1,11 +1,8 @@
-﻿@model List<Message>
+﻿@model IPagedList<Message>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/MainLayout/Index.cshtml";
-
-
 }
-
 
 <div class="mailcontent-subject">
     <h4>Gelen Kutusu</h4>
@@ -19,7 +16,6 @@
 }
 else
 {
-
     @foreach (var item in Model)
     {
         <div class="mailcontent-group">
@@ -33,7 +29,8 @@ else
                     </div>
                 </div>
 
-                <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="mailcontent-body"
+                     style="display: flex; justify-content: space-between; align-items: center; background-color:@(item.IsRead ? "#d3d3d3" : "#fff8e1"); padding:5px 10px; border-radius:4px;">
 
                     <div style="display: flex; align-items: center; gap: 16px;">
                         <form method="post" action="/Message/ChangeCategory" style="display:inline;">
@@ -66,17 +63,20 @@ else
                         </p>
                     </div>
 
-
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <a href="/Message/MessageDetail/@item.MessageId"
                            class="btn btn-sm btn-primary"
                            style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
                             Oku
                         </a>
-                        <button class="btn btn-sm btn-secondary"
-                                style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
-                            @(item.IsRead ? "Okundu" : "Okunmadı")
-                        </button>
+                        <form asp-action="ChangeReadStatus" asp-controller="Message" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.MessageId" />
+                            <button type="submit" class="btn btn-sm"
+                                    style="padding: 2px 8px; font-size: 12px; border-radius: 3px;
+                                                           background-color:@(item.IsRead ? "#28a745" : "#fbc02d"); color:white;">
+                                @(item.IsRead ? "Okunmadı Yap" : "Okundu Yap")
+                            </button>
+                        </form>
                         <button onclick="deletedMessage(@item.MessageId)"
                                 class="btn btn-sm btn-danger"
                                 style="padding: 2px 8px; font-size: 12px; border-radius: 3px; margin-left: auto;">
@@ -104,9 +104,11 @@ else
       confirmButtonText: "Evet, Sil!",
       cancelButtonText: "İptal"
     }).then((result) => {
-      if (result.isConfirmed) {
-      window.location.href="/Message/DeleteMessage/"+id;
+      if(result.isConfirmed){
+          window.location.href="/Message/DeleteMessage/"+id;
       }
     });
     }
 </script>
+
+@await Component.InvokeAsync("_MainLayoutPagedComponent", new { model = Model, actionName = "Index" })

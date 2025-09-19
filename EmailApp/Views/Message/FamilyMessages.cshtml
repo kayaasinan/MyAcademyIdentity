@@ -1,6 +1,6 @@
-﻿@model List<Message>
+﻿@model IPagedList<Message>
 @{
-    ViewData["Title"] = "Aile Mesajları";
+    ViewData["Title"] = "FamilyMessages";
     Layout = "~/Views/MainLayout/Index.cshtml";
 }
 
@@ -29,7 +29,7 @@ else
                     <div style="color:tomato;">@item.SendDate.ToString("dd-MM-yyyy")</div>
                 </div>
 
-                <div class="mailcontent-body" style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="mailcontent-body" style="display:flex; justify-content:space-between; align-items:center; padding:5px 10px; border-radius:4px;">
                     <p style="margin:0; font-size:14px; font-weight:500;">
                         Konu:<strong> @item.Subject</strong>
                         <span style="color:#007bff;">⇒ @(item.Body.Length > 50 ? item.Body.Substring(0, 50) + "..." : item.Body)</span>
@@ -77,3 +77,5 @@ else
         });
     }
 </script>
+
+@await Component.InvokeAsync("_MainLayoutPagedComponent", new { model = Model, actionName = "FamilyMessages" })

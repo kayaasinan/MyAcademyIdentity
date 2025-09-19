@@ -7,33 +7,37 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace EmailApp.Controllers
 {
     [Authorize]
     public class MessageController(AppDbContext _context, UserManager<AppUser> _userManager) : Controller
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var messages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToListAsync();
-            ViewBag.messageCount = messages.Count;
+            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToPagedList(page,4);
             return View(messages);
         }
         public async Task<IActionResult> MessageDetail(int id)
         {
-            await SetMessageCounts();
-            var message = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).FirstOrDefaultAsync(x => x.MessageId == id);
+            var user = await GetUser();
+            var message = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).FirstOrDefaultAsync(x => x.MessageId == id && (x.RecieverId == user.Id || x.SenderId == user.Id));
 
-            if (message == null)
+            if (message == null) return NotFound();
+
+            if (!message.IsRead && message.RecieverId == user.Id)
             {
-                return NotFound();
+                message.IsRead = true;
+                await _context.SaveChangesAsync();
             }
             return View(message);
         }
 
-        public async Task<IActionResult> Sendbox()
+        public async Task<IActionResult> Sendbox(int page=1)
         {
             await SetMessageCounts();
             var user = await GetUser();
@@ -42,7 +46,7 @@ namespace EmailApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var messages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.SenderId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToListAsync();
+            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.SenderId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToPagedList(page, 4);
 
             return View(messages);
         }
@@ -55,7 +59,6 @@ namespace EmailApp.Controllers
         [HttpPost]
         public async Task<IActionResult> SendMessage(SendMessageViewModel model, string action)
         {
-            await SetMessageCounts();
             var sender = await GetUser();
             ViewBag.nameSurname = sender.FirstName + " " + sender.LastName;
             var reciever = await _userManager.FindByEmailAsync(model.RecieverEmail);
@@ -120,11 +123,11 @@ namespace EmailApp.Controllers
             ViewBag.familyMessageCount = await _context.Messages.CountAsync(x => (x.RecieverId == user.Id || x.SenderId == user.Id) && x.Category == MessageCategory.Family && !x.IsDeleted);
         }
 
-        public async Task<IActionResult> DraftBox()
+        public async Task<IActionResult> DraftBox(int page = 1)
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var drafts = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.SenderId == user.Id && x.IsDraft && !x.IsDeleted).ToList();
+            var drafts = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.SenderId == user.Id && x.IsDraft && !x.IsDeleted).ToPagedList(page, 4);
 
             return View(drafts);
         }
@@ -141,11 +144,11 @@ namespace EmailApp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("TrashBox");
         }
-        public async Task<IActionResult> TrashBox()
+        public async Task<IActionResult> TrashBox(int page=1)
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var deletedMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id)).ToList();
+            var deletedMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id)).ToPagedList(page,4);
             return View(deletedMessages);
         }
         [HttpPost]
@@ -217,7 +220,6 @@ namespace EmailApp.Controllers
             return RedirectToAction("Index");
         }
 
-
         [HttpPost]
         public async Task<IActionResult> ChangeCategory(int id, MessageCategory category)
         {
@@ -248,26 +250,39 @@ namespace EmailApp.Controllers
                 return RedirectToAction("Index");
             }
         }
-        public async Task<IActionResult> BusinessMessages()
+        public async Task<IActionResult> BusinessMessages(int page = 1)
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var businessMessages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Business && !x.IsDeleted).ToListAsync();
+            var businessMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Business && !x.IsDeleted).ToPagedList(page, 4);
             return View(businessMessages);
         }
-        public async Task<IActionResult> FamilyMessages()
+        public async Task<IActionResult> FamilyMessages(int page = 1)
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var familyMessages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Family && !x.IsDeleted).ToListAsync();
+            var familyMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Family && !x.IsDeleted).ToPagedList(page, 4);
             return View(familyMessages);
         }
-        public async Task<IActionResult> ImportantMessages()
+        public async Task<IActionResult> ImportantMessages(int page = 1)
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var importantMessages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Important && !x.IsDeleted).ToListAsync();
+            var importantMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Important && !x.IsDeleted).ToPagedList(page, 4);
             return View(importantMessages);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeReadStatus(int id)
+        {
+            var user = await GetUser();
+            var message = await _context.Messages.FirstOrDefaultAsync(x => x.MessageId == id && (x.RecieverId == user.Id || x.SenderId == user.Id));
+
+            if (message == null) return NotFound();
+
+            message.IsRead = !message.IsRead;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }
