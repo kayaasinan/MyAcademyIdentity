@@ -1,11 +1,11 @@
 ﻿@model List<Message>
 @{
-    ViewData["Title"] = "İş Mesajları";
+    ViewData["Title"] = "Önemli Mesajlar";
     Layout = "~/Views/MainLayout/Index.cshtml";
 }
 
 <div class="mailcontent-subject">
-    <h4>İş Mesajları</h4>
+    <h4>Önemli Mesajlar</h4>
 </div>
 @if (Model == null || !Model.Any())
 {
@@ -35,6 +35,8 @@ else
                         <span style="color:#007bff;">⇒ @(item.Body.Length > 50 ? item.Body.Substring(0, 50) + "..." : item.Body)</span>
                     </p>
 
+
+
                     <div style="display:flex; gap:10px;">
                         <!-- Oku -->
                         <a href="/Message/MessageDetail/@item.MessageId" class="btn btn-sm btn-primary" style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">Oku</a>
@@ -48,7 +50,6 @@ else
                             </button>
                         </form>
 
-
                         <button onclick="deletedMessage(@item.MessageId)" class="btn btn-sm btn-danger"
                                 style="padding:2px 8px; font-size:12px; border-radius:3px;">
                             <i class="ri-delete-bin-line"></i>
@@ -59,6 +60,7 @@ else
         </div>
     }
 }
+
 <script>
     function deletedMessage(id){
         Swal.fire({

@@ -7,49 +7,64 @@
 <div class="mailcontent-subject">
     <h4>Çöp Kutusu</h4>
 </div>
- 
-@foreach (var item in Model)
+
+@if (Model == null || !Model.Any())
 {
-    <div class="mailcontent-group">
-        <div class="mailcontent-item">
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #666; margin-top: 2px;">
-                <div>
-                    @item.Sender?.FirstName @item.Sender?.LastName &lt;<strong>@item.Sender?.Email</strong>&gt;
-                    @if (item.Reciever != null)
-                    {
-                        <text>Kime: <strong>@item.Reciever.FirstName @item.Reciever.LastName</strong></text>
-                    }
+    <div style="text-align:center; padding:40px;">
+        <i class="ri-mail-close-line" style="font-size:48px; color:#ccc;"></i>
+        <h4 style="color:#666; margin-top:10px;">Görüntülenecek mesaj bulunamadı</h4>
+    </div>
+}
+else
+{
+
+    @foreach (var item in Model)
+    {
+        <div class="mailcontent-group">
+            <div class="mailcontent-item">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #666; margin-top: 2px;">
+                    <div>
+                        @item.Sender?.FirstName @item.Sender?.LastName &lt;<strong>@item.Sender?.Email</strong>&gt;
+                        @if (item.Reciever != null)
+                        {
+                            <text>Kime: <strong>@item.Reciever.FirstName @item.Reciever.LastName</strong></text>
+                        }
+                    </div>
+                    <div style="color: tomato;">
+                        @item.SendDate.ToString("dd-MM-yyyy")
+                    </div>
                 </div>
-                <div style="color: tomato;">
-                    @item.SendDate.ToString("dd-MM-yyyy")
-                </div>
-            </div>
 
 
-            <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
-       
-                <div style="display: flex; align-items: center; gap: 16px;">
-                    <p style="margin: 0; font-size: 14px; font-weight: 500;">Konu: @item.Subject</p>
-                </div>
+                <div class="mailcontent-body" style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
 
-         
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <a href="/Message/MessageDetail/@item.MessageId"
-                       class="btn btn-sm btn-primary"
-                       style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">Oku</a>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <p style="margin:0; font-size:14px; font-weight:500;">
+                            Konu:<strong> @item.Subject</strong>
+                            <span style="color:#007bff;">⇒ @(item.Body.Length > 50 ? item.Body.Substring(0, 50) + "..." : item.Body)</span>
+                        </p>
+                    </div>
 
-                    <button onclick="backToMessage(@item.MessageId)"
-                            class="btn btn-sm btn-success"
-                            style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
-                        Geri Al
-                    </button>
 
-                    <button onclick="deletedMessage(@item.MessageId)" class="btn btn-sm btn-danger" style="padding: 2px 8px; font-size: 12px; border-radius: 3px;"><i class="ri-delete-bin-line"></i>
-                    </button>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <a href="/Message/MessageDetail/@item.MessageId"
+                           class="btn btn-sm btn-primary"
+                           style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">Oku</a>
+
+                        <button onclick="backToMessage(@item.MessageId)"
+                                class="btn btn-sm btn-success"
+                                style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
+                            Geri Al
+                        </button>
+
+                        <button onclick="deletedMessage(@item.MessageId)" class="btn btn-sm btn-danger" style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
 
 <script>
@@ -75,7 +90,7 @@
     function backToMessage(id) {
         Swal.fire({
             title: "Mesajı geri almak istediğinizden emin misiniz?",
-            text: "Mesaj geri kutusuna taşınacak.",
+            text: "Mesaj ilgili kutuya taşınacak.",
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#28a745",

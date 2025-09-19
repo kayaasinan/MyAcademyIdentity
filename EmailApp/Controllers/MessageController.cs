@@ -16,8 +16,8 @@ namespace EmailApp.Controllers
         public async Task<IActionResult> Index()
         {
             await SetMessageCounts();
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var messages = _context.Messages.Include(x => x.Sender).Where(x => x.RecieverId == user.Id && !x.IsDraft && !x.IsDeleted).ToList();
+            var user = await GetUser();
+            var messages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToListAsync();
             ViewBag.messageCount = messages.Count;
             return View(messages);
         }
@@ -36,13 +36,13 @@ namespace EmailApp.Controllers
         public async Task<IActionResult> Sendbox()
         {
             await SetMessageCounts();
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await GetUser();
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.SenderId == user.Id && !x.IsDeleted && !x.IsDraft).ToList();
+            var messages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.SenderId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToListAsync();
 
             return View(messages);
         }
@@ -56,7 +56,7 @@ namespace EmailApp.Controllers
         public async Task<IActionResult> SendMessage(SendMessageViewModel model, string action)
         {
             await SetMessageCounts();
-            var sender = await _userManager.FindByNameAsync(User.Identity.Name);
+            var sender = await GetUser();
             ViewBag.nameSurname = sender.FirstName + " " + sender.LastName;
             var reciever = await _userManager.FindByEmailAsync(model.RecieverEmail);
 
@@ -85,9 +85,14 @@ namespace EmailApp.Controllers
             return RedirectToAction("Index");
 
         }
+        private async Task<AppUser> GetUser()
+        {
+            return await _userManager.FindByNameAsync(User.Identity.Name);
+        }
+
         private async Task SetMessageCounts()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await GetUser();
             if (user == null)
             {
                 ViewBag.messageCount = 0;
@@ -100,33 +105,32 @@ namespace EmailApp.Controllers
                 return;
             }
 
-            ViewBag.messageCount = await _context.Messages.CountAsync(x => x.RecieverId == user.Id && !x.IsDraft && !x.IsDeleted);
+            ViewBag.messageCount = await _context.Messages.CountAsync(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft);
 
-            ViewBag.sentMessageCount = await _context.Messages.CountAsync(x => x.SenderId == user.Id && !x.IsDraft && !x.IsDeleted);
+            ViewBag.sentMessageCount = await _context.Messages.CountAsync(x => x.SenderId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft);
 
             ViewBag.draftMessageCount = await _context.Messages.CountAsync(x => x.SenderId == user.Id && x.IsDraft && !x.IsDeleted);
 
             ViewBag.deletedMessageCount = await _context.Messages.CountAsync(x => (x.RecieverId == user.Id || x.SenderId == user.Id) && x.IsDeleted);
 
-            ViewBag.importantMessageCount = await _context.Messages.CountAsync(x => x.RecieverId == user.Id && x.Category == MessageCategory.Important && !x.IsDeleted);
+            ViewBag.importantMessageCount = await _context.Messages.CountAsync(x => (x.RecieverId == user.Id || x.SenderId == user.Id) && x.Category == MessageCategory.Important && !x.IsDeleted);
 
-            ViewBag.businessMessageCount = await _context.Messages.CountAsync(x => x.RecieverId == user.Id && x.Category == MessageCategory.Business && !x.IsDeleted);
+            ViewBag.businessMessageCount = await _context.Messages.CountAsync(x => (x.RecieverId == user.Id || x.SenderId == user.Id) && x.Category == MessageCategory.Business && !x.IsDeleted);
 
-            ViewBag.familyMessageCount = await _context.Messages.CountAsync(x => x.RecieverId == user.Id && x.Category == MessageCategory.Family && !x.IsDeleted);
+            ViewBag.familyMessageCount = await _context.Messages.CountAsync(x => (x.RecieverId == user.Id || x.SenderId == user.Id) && x.Category == MessageCategory.Family && !x.IsDeleted);
         }
 
         public async Task<IActionResult> DraftBox()
         {
             await SetMessageCounts();
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var drafts = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever)
-                              .Where(x => x.SenderId == user.Id && x.IsDraft && !x.IsDeleted).ToList();
+            var user = await GetUser();
+            var drafts = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.SenderId == user.Id && x.IsDraft && !x.IsDeleted).ToList();
 
             return View(drafts);
         }
         public async Task<IActionResult> DeleteMessage(int id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await GetUser();
             var deletedMessage = _context.Messages.FirstOrDefault(x => x.MessageId == id && ((x.IsDraft && x.SenderId == user.Id) || (!x.IsDraft && (x.SenderId == user.Id || x.RecieverId == user.Id))));
 
             if (deletedMessage == null)
@@ -140,14 +144,14 @@ namespace EmailApp.Controllers
         public async Task<IActionResult> TrashBox()
         {
             await SetMessageCounts();
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await GetUser();
             var deletedMessages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id)).ToList();
             return View(deletedMessages);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteTrashBoxMessage(int id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await GetUser();
             var message = _context.Messages.FirstOrDefault(x => x.MessageId == id && (x.SenderId == user.Id || x.RecieverId == user.Id));
             if (message == null) return NotFound();
 
@@ -159,34 +163,65 @@ namespace EmailApp.Controllers
         [HttpPost]
         public async Task<IActionResult> BackToMessage(int id)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var message = _context.Messages.FirstOrDefault(x => x.MessageId == id && x.IsDeleted && (x.SenderId == user.Id || x.RecieverId == user.Id));
+            var user = await GetUser();
+            var message = _context.Messages.FirstOrDefault(x =>
+                x.MessageId == id &&
+                x.IsDeleted &&
+                (x.SenderId == user.Id || x.RecieverId == user.Id));
+
             if (message == null) return NotFound();
 
+            // Mesajı burada geri alıyorum.
             message.IsDeleted = false;
-            _context.SaveChanges();
+            message.Category = MessageCategory.Default;
+            message.IsDraft = false;
+            await _context.SaveChangesAsync();
 
-            // Çöp kutusundan geri alınacak mesajı Id'ye göre alıyorum.
+            //Burada gelen/giden kutusu yönlendirmesi yapıyorum.
 
-            if (message.SenderId == user.Id && message.IsDraft)
+            if (message.RecieverId == user.Id)
             {
-                return RedirectToAction("DraftBox");
+                return RedirectToAction("Index");
             }
             else if (message.SenderId == user.Id)
             {
                 return RedirectToAction("Sendbox");
             }
-            else if (message.RecieverId == user.Id)
+
+            return RedirectToAction("Index");
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> BackToMessageFromCategory(int id)
+        {
+            var user = await GetUser();
+            var message = _context.Messages.FirstOrDefault(x =>
+                x.MessageId == id &&
+                !x.IsDeleted &&
+                (x.SenderId == user.Id || x.RecieverId == user.Id));
+
+            if (message == null) return NotFound();
+
+            message.Category = MessageCategory.Default;
+            await _context.SaveChangesAsync();
+
+            if (message.RecieverId == user.Id)
             {
                 return RedirectToAction("Index");
             }
+            else if (message.SenderId == user.Id)
+            {
+                return RedirectToAction("Sendbox");
+            }
+
             return RedirectToAction("Index");
         }
-      
+
+
         [HttpPost]
         public async Task<IActionResult> ChangeCategory(int id, MessageCategory category)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await GetUser();
 
             var message = _context.Messages.FirstOrDefault(x => x.MessageId == id);
             if (message == null)
@@ -215,19 +250,22 @@ namespace EmailApp.Controllers
         }
         public async Task<IActionResult> BusinessMessages()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var businessMessages= await _context.Messages.Include(x=>x.Sender).Include(x=>x.Reciever).Where(x=>(x.SenderId==user.Id || x.RecieverId==user.Id) && x.Category==MessageCategory.Business && !x.IsDeleted).ToListAsync();
+            await SetMessageCounts();
+            var user = await GetUser();
+            var businessMessages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Business && !x.IsDeleted).ToListAsync();
             return View(businessMessages);
         }
         public async Task<IActionResult> FamilyMessages()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            await SetMessageCounts();
+            var user = await GetUser();
             var familyMessages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Family && !x.IsDeleted).ToListAsync();
             return View(familyMessages);
         }
         public async Task<IActionResult> ImportantMessages()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            await SetMessageCounts();
+            var user = await GetUser();
             var importantMessages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Important && !x.IsDeleted).ToListAsync();
             return View(importantMessages);
         }
