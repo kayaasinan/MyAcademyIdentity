@@ -64,22 +64,16 @@ else
                     </div>
 
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <a href="/Message/MessageDetail/@item.MessageId"
-                           class="btn btn-sm btn-primary"
-                           style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
+                        <a href="/Message/MessageDetail/@item.MessageId" class="btn btn-sm btn-primary" style="padding: 2px 8px; font-size: 12px; border-radius: 3px;">
                             Oku
                         </a>
                         <form asp-action="ChangeReadStatus" asp-controller="Message" method="post" style="display:inline;">
                             <input type="hidden" name="id" value="@item.MessageId" />
                             <button type="submit" class="btn btn-sm"
-                                    style="padding: 2px 8px; font-size: 12px; border-radius: 3px;
-                                                           background-color:@(item.IsRead ? "#28a745" : "#fbc02d"); color:white;">
-                                @(item.IsRead ? "Okunmadı Yap" : "Okundu Yap")
+                                    style="padding: 2px 8px; font-size: 12px; border-radius: 3px; background-color:@(item.IsRead ? "#28a745" : "#fbc02d"); color:white;"> @(item.IsRead ? "Okunmadı Yap" : "Okundu Yap")
                             </button>
                         </form>
-                        <button onclick="deletedMessage(@item.MessageId)"
-                                class="btn btn-sm btn-danger"
-                                style="padding: 2px 8px; font-size: 12px; border-radius: 3px; margin-left: auto;">
+                        <button onclick="deletedMessage(@item.MessageId)" class="btn btn-sm btn-danger" style="padding: 2px 8px; font-size: 12px; border-radius: 3px; margin-left: auto;">
                             <i class="ri-delete-bin-line"></i>
                         </button>
                     </div>

@@ -44,14 +44,12 @@ else
 
                         <form asp-action="BackToMessageFromCategory" asp-controller="Message" method="post" style="display:inline;">
                             <input type="hidden" name="id" value="@item.MessageId" />
-                            <button type="submit" class="btn btn-sm btn-success"
-                                    style="padding:2px 8px; font-size:12px; border-radius:3px;">
+                            <button type="submit" class="btn btn-sm btn-success" style="padding:2px 8px; font-size:12px; border-radius:3px;">
                                 Geri Al
                             </button>
                         </form>
 
-                        <button onclick="deletedMessage(@item.MessageId)" class="btn btn-sm btn-danger"
-                                style="padding:2px 8px; font-size:12px; border-radius:3px;">
+                        <button onclick="deletedMessage(@item.MessageId)" class="btn btn-sm btn-danger" style="padding:2px 8px; font-size:12px; border-radius:3px;">
                             <i class="ri-delete-bin-line"></i>
                         </button>
                     </div>
