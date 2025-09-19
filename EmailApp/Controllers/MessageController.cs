@@ -182,26 +182,7 @@ namespace EmailApp.Controllers
             }
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> CategoryMessages(MessageCategory messageCategory)
-        {
-            await SetMessageCounts(); 
-
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-
-            var messages = _context.Messages
-                .Include(x => x.Sender)
-                .Include(x => x.Reciever)
-                .Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id)
-                            && x.Category == messageCategory
-                            && !x.IsDeleted)
-                .ToList();
-
-            ViewBag.Category = messageCategory; 
-
-            return View(messages); 
-        }
-
-       
+      
         [HttpPost]
         public async Task<IActionResult> ChangeCategory(int id, MessageCategory category)
         {
@@ -214,14 +195,41 @@ namespace EmailApp.Controllers
             message.Category = category;
             await _context.SaveChangesAsync();
 
-          
-            if (message.SenderId == user.Id)
-                return RedirectToAction("Sendbox");
-            else if (message.RecieverId == user.Id)
+
+            if (category == MessageCategory.Business)
+            {
+                return RedirectToAction("BusinessMessages");
+            }
+            else if (category == MessageCategory.Family)
+            {
+                return RedirectToAction("FamilyMessages");
+            }
+            else if (category == MessageCategory.Important)
+            {
+                return RedirectToAction("ImportantMessages");
+            }
+            else
+            {
                 return RedirectToAction("Index");
-
-            return RedirectToAction("Index");
+            }
         }
-
+        public async Task<IActionResult> BusinessMessages()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var businessMessages= await _context.Messages.Include(x=>x.Sender).Include(x=>x.Reciever).Where(x=>(x.SenderId==user.Id || x.RecieverId==user.Id) && x.Category==MessageCategory.Business && !x.IsDeleted).ToListAsync();
+            return View(businessMessages);
+        }
+        public async Task<IActionResult> FamilyMessages()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var familyMessages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Family && !x.IsDeleted).ToListAsync();
+            return View(familyMessages);
+        }
+        public async Task<IActionResult> ImportantMessages()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var importantMessages = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => (x.SenderId == user.Id || x.RecieverId == user.Id) && x.Category == MessageCategory.Important && !x.IsDeleted).ToListAsync();
+            return View(importantMessages);
+        }
     }
 }
