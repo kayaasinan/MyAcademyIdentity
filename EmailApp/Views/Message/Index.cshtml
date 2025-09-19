@@ -33,7 +33,9 @@ else
                      style="display: flex; justify-content: space-between; align-items: center; background-color:@(item.IsRead ? "#d3d3d3" : "#fff8e1"); padding:5px 10px; border-radius:4px;">
 
                     <div style="display: flex; align-items: center; gap: 16px;">
-                        <form method="post" action="/Message/ChangeCategory" style="display:inline;">
+
+                        <form method="post" action="/Message/ChangeCategory" style="display:inline;"
+                              onsubmit="return categoryChange(this);">
                             <input type="hidden" name="id" value="@item.MessageId" />
                             <input type="hidden" name="category" value="Important" />
                             <button type="submit" style="background:none; border:none; cursor:pointer; color: #f5c518; font-size: 20px;">
@@ -41,7 +43,7 @@ else
                             </button>
                         </form>
 
-                        <form method="post" action="/Message/ChangeCategory" style="display:inline;">
+                        <form method="post" action="/Message/ChangeCategory" style="display:inline;" onsubmit="return categoryChange(this);">
                             <input type="hidden" name="id" value="@item.MessageId" />
                             <input type="hidden" name="category" value="Family" />
                             <button type="submit" style="background:none; border:none; cursor:pointer; color: #28a745; font-size: 20px;">
@@ -49,7 +51,7 @@ else
                             </button>
                         </form>
 
-                        <form method="post" action="/Message/ChangeCategory" style="display:inline;">
+                        <form method="post" action="/Message/ChangeCategory" style="display:inline;" onsubmit="return categoryChange(this);">
                             <input type="hidden" name="id" value="@item.MessageId" />
                             <input type="hidden" name="category" value="Business" />
                             <button type="submit" style="background:none; border:none; cursor:pointer; color: #dc3545; font-size: 20px;">
@@ -101,6 +103,28 @@ else
           window.location.href="/Message/DeleteMessage/"+id;
       }
     });
+    }
+</script>
+<script>
+    function categoryChange(form) {
+        event.preventDefault();
+
+        Swal.fire({
+            title: 'Kategori Değişikliği',
+            text: 'Mesajın kategorisini değiştirmek istediğinize emin misiniz?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Evet, değiştir',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if(result.isConfirmed){
+                form.submit();
+            }
+        });
+
+        return false;
     }
 </script>
 
