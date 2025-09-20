@@ -59,6 +59,12 @@ Kullanıcılar giriş yaptıktan sonra birbirlerine mesaj gönderebilir, mesajla
 **📁 Uyarılar**  
 ![SweetAlert](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/SweetAlert.png?raw=true)
 
+**📊 Mesaj Raporları**  
+![MessageReport](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/MessageReport.png?raw=true)
+
+**📁 Excel Dokümanı**  
+![ReportToExcel](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/ReportToExcel.png?raw=true)
+
 
 
 
