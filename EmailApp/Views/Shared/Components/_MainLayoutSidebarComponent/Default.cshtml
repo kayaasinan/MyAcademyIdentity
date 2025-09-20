@@ -25,23 +25,23 @@
                 <span class="badge bg-info ms-auto">@ViewBag.messageCount</span>
             </a>
             <a href="#" class="nav-link" onclick="window.location.href='/Message/Sendbox'">
-                <i class="ri-inbox-line" style="margin-right: 6px;"></i>
+                <i class="ri-send-plane-line" style="margin-right: 6px;"></i>
                 <span>Giden Kutusu</span>
                 <span class="badge bg-info ms-auto">@ViewBag.sentMessageCount</span>
             </a>
             <a href="#" class="nav-link" onclick="window.location.href='/Message/DraftBox'">
-                <i class="ri-inbox-line" style="margin-right: 6px;"></i>
+                <i class="ri-draft-line" style="margin-right: 6px;"></i>
                 <span>Taslaklar</span>
                 <span class="badge bg-info ms-auto">@ViewBag.draftMessageCount</span>
             </a>
             <a href="#" class="nav-link" onclick="window.location.href='/Message/TrashBox'">
-                <i class="ri-inbox-line" style="margin-right: 6px;"></i>
+                <i class="ri-delete-bin-line" style="margin-right: 6px;"></i>
                 <span>Çöp Kutusu</span>
                 <span class="badge bg-info ms-auto">@ViewBag.deletedMessageCount</span>
             </a>
         </nav>
 
-        <label class="sidebar-label">Diğer</label>
+        <label class="sidebar-label">Kategoriler</label>
         <nav class="nav flex-column mb-5">
             <a href="/Message/BusinessMessages" class="nav-link">
                 <i class="ri-briefcase-line" style="color: #dc3545;"></i>
@@ -59,6 +59,12 @@
                 <span class="badge bg-info ms-auto">@ViewBag.importantMessageCount</span>
             </a>
         </nav>
-
+        <label class="sidebar-label">Diğer</label>
+        <nav class="nav flex-column mb-5">
+            <a href="/Message/MessageReport" class="nav-link" target="_blank">
+                <i class="ri-bar-chart-box-line" style="color: #000000;"></i>
+                <span>Raporlar</span>
+            </a>
+        </nav>
     </div>
 </div>

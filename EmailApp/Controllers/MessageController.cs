@@ -59,6 +59,7 @@ namespace EmailApp.Controllers
         [HttpPost]
         public async Task<IActionResult> SendMessage(SendMessageViewModel model, string action)
         {
+            await SetMessageCounts();
             var sender = await GetUser();
             ViewBag.nameSurname = sender.FirstName + " " + sender.LastName;
             var reciever = await _userManager.FindByEmailAsync(model.RecieverEmail);
@@ -252,6 +253,14 @@ namespace EmailApp.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> MessageReport()
+        {
+            await SetMessageCounts();
+            var user = await GetUser();
+            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToList();
+            return View(messages);
         }
     }
 }

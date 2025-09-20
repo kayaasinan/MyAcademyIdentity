@@ -9,10 +9,7 @@
 </div>
 @if (Model == null || !Model.Any())
 {
-    <div style="text-align:center; padding:40px;">
-        <i class="ri-mail-close-line" style="font-size:48px; color:#ccc;"></i>
-        <h4 style="color:#666; margin-top:10px;">Görüntülenecek mesaj bulunamadı</h4>
-    </div>
+    @await Component.InvokeAsync("_MainLayoutEmptyPageComponent")
 }
 else
 {
@@ -59,23 +56,6 @@ else
         </div>
     }
 }
-<script>
-    function deletedMessage(id){
-        Swal.fire({
-            title: "Mesajı çöp kutusuna göndermek istediğinizden emin misiniz?",
-            text: "Geri almak için ÇÖP KUTUSU sayfasına gidiniz!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Evet, Sil!",
-            cancelButtonText: "İptal"
-        }).then((result) => {
-            if(result.isConfirmed){
-                window.location.href = "/Message/DeleteMessage/" + id;
-            }
-        });
-    }
-</script>
+
 
 @await Component.InvokeAsync("_MainLayoutPagedComponent", new { model = Model, actionName = "BusinessMessages" })
