@@ -17,7 +17,9 @@ Kullanıcılar giriş yaptıktan sonra birbirlerine mesaj gönderebilir, mesajla
 | 🗑 **Silme & Geri Alma** | Mesajı çöp kutusuna taşıma ve geri alma |
 | 📄 **Sayfalama** | X.PagedList.Mvc.Core ile mesajların sayfa bazlı listelenmesi |
 | 🔔 **SweetAlert2** | Kullanıcıya kategori değişikliği, silme vb. işlemlerde görsel uyarılar |
+| 📤 **Raporlama** | Mesajları Excel / PDF olarak dışa aktarma |
 | 🎨 **UI/UX** | Bootstrap + özel CSS ile basit, şık ve kullanıcı dostu arayüz |
+
 
 ---
 
