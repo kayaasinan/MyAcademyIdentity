@@ -14,7 +14,6 @@ namespace EmailApp.Entities
         public DateTime SendDate { get; set; }
         public bool IsDraft { get; set; }
         public bool IsDeleted { get; set; }
-        public bool IsImportant { get; set; }
         public bool IsRead { get; set; }
         public MessageCategory Category { get; set; }=MessageCategory.Default;
     }

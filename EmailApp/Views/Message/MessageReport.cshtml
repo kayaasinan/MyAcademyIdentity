@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "MessageReport";
     Layout = null;
+    int count = 0;
 }
 
 <br />
@@ -31,12 +32,15 @@
         <tbody>
             @foreach (var x in Model)
             {
+                count++;
                 <tr>
-                    <td>@x.MessageId</td>
+                    <td>@count</td>
                     <td>@x.Sender.FirstName @x.Sender.LastName</td>
                     <td>@x.Reciever.FirstName @x.Reciever.LastName</td>
                     <td>@x.Subject</td>
-                    <td>@x.Body</td>
+                    <td data-full="@x.Body">
+                        @(x.Body.Length > 100 ? x.Body.Substring(0, 100) + "..." : x.Body)
+                    </td>
                     <td>@(x.Category==MessageCategory.Default ? "Gelen Kutusu" : "") </td>
                     <td>@x.SendDate.ToString("dd-MMM-yyyy")</td>
                 </tr>
@@ -57,16 +61,63 @@
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
     <script>
-        $(document).ready(function() {
-            var table = $('#example').DataTable( {
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
                 lengthChange: false,
-                buttons: [ 'copy', 'excel', 'csv', 'pdf', 'colvis' ]
-            } );
+                buttons: [
+                    {
+                        extend: 'copy',
+                        exportOptions: {
+                            columns: ':visible',
+                            format: {
+                                body: function (data, row, column, node) {
+                                    return $(node).data('full') || data;
+                                }
+                            }
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':visible',
+                            format: {
+                                body: function (data, row, column, node) {
+                                    return $(node).data('full') || data;
+                                }
+                            }
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: ':visible',
+                            format: {
+                                body: function (data, row, column, node) {
+                                    return $(node).data('full') || data;
+                                }
+                            }
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':visible',
+                            format: {
+                                body: function (data, row, column, node) {
+                                    return $(node).data('full') || data;
+                                }
+                            }
+                        }
+                    },
+                    'colvis'
+                ]
+            });
 
             table.buttons().container()
-                .appendTo( '#example_wrapper .col-md-6:eq(0)' );
-        } );
+                .appendTo('#example_wrapper .col-md-6:eq(0)');
+        });
     </script>
 </body>
 </html>

@@ -81,31 +81,10 @@ else
     }
 }
 <div class="mailcontent-footer">
-    <a href="/Message/SendMessage/" class="btn btn-outline-info btn-icontext"><i class="ri-reply-line me-1"></i> Mesaj Gönder</a>
+    <a href="/Message/Sendbox/" class="btn btn-outline-info btn-icontext"><i class="ri-reply-line me-1"></i> Giden Kutusu</a>
 </div>
 
 
-<script>
-    function categoryChange(form) {
-        event.preventDefault();
 
-        Swal.fire({
-            title: 'Kategori Değişikliği',
-            text: 'Mesajın kategorisini değiştirmek istediğinize emin misiniz?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Evet, değiştir',
-            cancelButtonText: 'İptal'
-        }).then((result) => {
-            if(result.isConfirmed){
-                form.submit();
-            }
-        });
-
-        return false;
-    }
-</script>
 
 @await Component.InvokeAsync("_MainLayoutPagedComponent", new { model = Model, actionName = "Index" })

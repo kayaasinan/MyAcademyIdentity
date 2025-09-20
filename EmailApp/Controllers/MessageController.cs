@@ -19,11 +19,12 @@ namespace EmailApp.Controllers
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToPagedList(page, 4);
+            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).OrderByDescending(x=>x.SendDate).ToPagedList(page, 4);
             return View(messages);
         }
         public async Task<IActionResult> MessageDetail(int id)
         {
+            await SetMessageCounts();
             var user = await GetUser();
             var message = await _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).FirstOrDefaultAsync(x => x.MessageId == id && (x.RecieverId == user.Id || x.SenderId == user.Id));
 
@@ -51,15 +52,15 @@ namespace EmailApp.Controllers
             return View(messages);
         }
 
-        public IActionResult SendMessage()
+        public async Task< IActionResult> SendMessage()
         {
+            await SetMessageCounts();
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> SendMessage(SendMessageViewModel model, string action)
         {
-            await SetMessageCounts();
             var sender = await GetUser();
             ViewBag.nameSurname = sender.FirstName + " " + sender.LastName;
             var reciever = await _userManager.FindByEmailAsync(model.RecieverEmail);
@@ -259,7 +260,7 @@ namespace EmailApp.Controllers
         {
             await SetMessageCounts();
             var user = await GetUser();
-            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).ToList();
+            var messages = _context.Messages.Include(x => x.Sender).Include(x => x.Reciever).Where(x => x.RecieverId == user.Id && x.Category == MessageCategory.Default && !x.IsDeleted && !x.IsDraft).OrderByDescending(x=>x.SendDate).ToList();
             return View(messages);
         }
     }
