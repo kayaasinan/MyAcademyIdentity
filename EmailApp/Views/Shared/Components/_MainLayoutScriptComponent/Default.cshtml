@@ -101,3 +101,23 @@
         });
     }
 </script>
+<script>
+    function categoryChange(form) {
+        Swal.fire({
+            title: 'Kategori değişikliği yapmak istediğinizden emin misiniz?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Evet',
+            cancelButtonText: 'Hayır',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+
+        return false;
+    }
+</script>
+
