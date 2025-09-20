@@ -38,25 +38,25 @@ Kullanıcılar giriş yaptıktan sonra birbirlerine mesaj gönderebilir, mesajla
 
 ## 📷 Ekran Görüntüleri 
 
-**🏠 Giriş Sayfası**  
+**🔑 Giriş Sayfası**  
 ![Login](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/Login.png?raw=true)
 
-**💡 Gelen Kutusu**  
+**📩 Gelen Kutusu**  
 ![Inbox](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/Inbox.png?raw=true)
 
-**📩 Giden Kutusu)**  
+**📤 Giden Kutusu)**  
 ![Sendbox](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/Sendbox.png?raw=true)
 
-**🔑 Mesaj Gönderme**  
+**📨 Mesaj Gönderme**  
 ![SendMessage](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/SendMessage.png?raw=true)
 
-**📬 Bildirimler**  
+**🔔 Bildirimler**  
 ![Notifications](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/Notifications.png?raw=true)
 
-**📊 Çöp Kutusu)**  
+**🗑️ Çöp Kutusu)**  
 ![Trashbox](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/Trashbox.png?raw=true)
 
-**📁 Uyarılar**  
+**⚠️ Uyarılar**  
 ![SweetAlert](https://github.com/kayaasinan/MyAcademyIdentity/blob/last_Identity_Branch/EmailApp/imagesIdentity/SweetAlert.png?raw=true)
 
 **📊 Mesaj Raporları**  
