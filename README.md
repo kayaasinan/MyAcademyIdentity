@@ -12,7 +12,7 @@ Kullanıcılar giriş yaptıktan sonra birbirlerine mesaj gönderebilir, mesajla
 |------------|-------------|
 | 🔑 **Kullanıcı Yönetimi** | ASP.NET Core Identity ile kayıt, giriş, çıkış işlemleri |
 | ✉️ **Mesajlaşma** | Kullanıcılar arasında mesaj gönderme ve alma |
-| 🗂 **Kategoriler** | Mesajları *Important ⭐*, *Family 🏠*, *Business 💼*, *Default 📌* olarak sınıflandırma |
+| 🗂 **Kategoriler** | Mesajları *Önemli ⭐*, *Aile 🏠* ve *İş Mesajları 💼* olarak sınıflandırma |
 | 👀 **Okundu/Okunmadı** | Mesajın durumunu butonla değiştirme veya detay görünümünde otomatik güncelleme |
 | 🗑 **Silme & Geri Alma** | Mesajı çöp kutusuna taşıma ve geri alma |
 | 📄 **Sayfalama** | X.PagedList.Mvc.Core ile mesajların sayfa bazlı listelenmesi |
